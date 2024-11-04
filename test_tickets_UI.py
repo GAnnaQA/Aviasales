@@ -21,3 +21,14 @@ def test_choose_date(add_driver):
     return_date_value = aviasales.get_return_date_value()
     assert data_test.serch_day in departure_date_value
     assert return_date_value == 'Return'
+
+
+def test_choose_count_of_passenger(add_driver):
+    aviasales = main_page_of_search_tickets(add_driver)
+    aviasales.choose_country_of_location()
+    aviasales.add_coockie()
+    passengers_value = aviasales.choose_count_of_passenger(
+        data_test.adults_count, data_test.children_count, data_test.infants_count
+        )
+    assert data_test.sum_count_passengers in passengers_value
+    

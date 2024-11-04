@@ -90,6 +90,59 @@ class main_page_of_search_tickets:
             return "Кнопка не отображается на странице"
 
 
+    def choose_count_of_passenger(self, Adults: str, Children: str, Infants: str):
+        button = self._driver.find_element(
+            By.CSS_SELECTOR, 'button[data-test-id="passengers-field"]'
+            )
+        button.click()
+        adults_value = self._driver.find_element(
+            By.XPATH, '//div[@data-test-id="number-of-adults"]//div[@data-test-id="passenger-number"]'
+            ).text
+        while adults_value != Adults:
+            if adults_value < Adults:
+                self._driver.find_element(
+                    By.XPATH, '//div[@data-test-id="number-of-adults"]//button[@data-test-id="increase-button"]'
+                ).click()
+            elif adults_value > Adults:
+                self._driver.find_element(
+                    By.XPATH, '//div[@data-test-id="number-of-adults"]//button[@data-test-id="decrease-button"]'
+                ).click()
+            adults_value = self._driver.find_element(
+                By.XPATH, '//div[@data-test-id="number-of-adults"]//div[@data-test-id="passenger-number"]'
+                ).text
+        children_value = self._driver.find_element(
+            By.XPATH, '//div[@data-test-id="number-of-children"]//div[@data-test-id="passenger-number"]'
+            ).text
+        while children_value != Children:
+            if children_value < Children:
+                self._driver.find_element(
+                    By.XPATH, '//div[@data-test-id="number-of-children"]//button[@data-test-id="increase-button"]'
+                ).click()
+            elif children_value > Children:
+                self._driver.find_element(
+                    By.XPATH, '//div[@data-test-id="number-of-children"]//button[@data-test-id="decrease-button"]'
+                ).click()
+            children_value = self._driver.find_element(
+                By.XPATH, '//div[@data-test-id="number-of-children"]//div[@data-test-id="passenger-number"]'
+                ).text
+        infants_value = self._driver.find_element(
+            By.XPATH, '//div[@data-test-id="number-of-infants"]//div[@data-test-id="passenger-number"]'
+            ).text
+        while infants_value != Infants:
+            if infants_value < Infants:
+                self._driver.find_element(
+                    By.XPATH, '//div[@data-test-id="number-of-infants"]//button[@data-test-id="increase-button"]'
+                ).click()
+            elif infants_value > Infants:
+                self._driver.find_element(
+                    By.XPATH, '//div[@data-test-id="number-of-infants"]//button[@data-test-id="decrease-button"]'
+                ).click()
+            infants_value = self._driver.find_element(
+                By.XPATH, '//div[@data-test-id="number-of-infants"]//div[@data-test-id="passenger-number"]'
+                ).text
+        return button.find_element(By.CSS_SELECTOR, 'div[data-test-id="passenger-numbers"]').text
+
+
     def choose_popular_destination(self, index: int)-> str:
         if not (1 <= index <= 4):
             raise ValueError("Индекс должен быть от 1 до 4")
