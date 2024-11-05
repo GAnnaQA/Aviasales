@@ -1,11 +1,31 @@
 from datetime import datetime, timedelta, timezone
 import random
+import allure
 
 
 class data_test:
-    serch_day = '4'
-    serch_month = 'April'
-    adults_count = '3'
-    children_count = '2'
-    infants_count = adults_count
-    sum_count_passengers = str(int(adults_count) + int(children_count) + int(infants_count))
+    with allure.step('Генерция номера популярного направления для выбора'):
+        direction_number = random.randint(1, 4)
+    with allure.step('Случайный выбор дня'):
+        serch_day = random.randint(1, 28)
+    
+    @allure.step('Случайный выбор месяца')
+    def choose_month(self)-> str:
+        months = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December']
+        serch_month = random.choice(months)
+        return serch_month
+    
+    @allure.step('Генерация количества пассажиров')
+    def generate_passenger_count(self)-> list[str]:
+        max_passengers = 9 
+        adults = random.randint(1, max_passengers)
+        max_children_and_infants = max_passengers - adults
+        if max_children_and_infants > 0:
+            children = random.randint(0, max_children_and_infants)
+            infants = random.randint(0, min(adults, max_children_and_infants - children))
+        else:
+            children = 0
+            infants = 0
+        sum_count_passengers = adults + children + infants
+        return [str(adults), str(children), str(infants), str(sum_count_passengers)]

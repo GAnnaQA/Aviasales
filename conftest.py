@@ -1,13 +1,16 @@
 import pytest
 from selenium import webdriver
+import allure
 
 
 @pytest.fixture
 def add_driver():
-    browser = webdriver.Chrome()
-    browser.implicitly_wait(4) 
-    browser.maximize_window()
+    with allure.step('Открыть и настроить браузер'):
+        browser = webdriver.Chrome()
+        browser.implicitly_wait(4) 
+        browser.maximize_window()
 
     yield browser 
 
-    browser.quit()
+    with allure.step('Закрыть браузер'):
+        browser.quit()
