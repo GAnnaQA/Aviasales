@@ -2,8 +2,12 @@ from datetime import datetime, timedelta, timezone
 import random
 import allure
 
-
+@allure.step('Обращение к хранилищу данных')
 class data_test:
+    Economy_class = "Economy"
+    Comfort_class = "Comfort"
+    Business_class = "Business"
+    First_class = "First"
     with allure.step('Генерция номера популярного направления для выбора'):
         direction_number = random.randint(1, 4)
     with allure.step('Случайный выбор дня'):
