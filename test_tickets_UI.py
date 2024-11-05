@@ -7,7 +7,7 @@ import allure
 @allure.feature('Search')
 @allure.severity(allure.severity_level.CRITICAL)
 @allure.title('Позитивный тест на поиск авиабилетов в одну сторону')
-def test_input(add_driver):
+def test_one_way_flight_search(add_driver):
     aviasales = main_page_of_search_tickets(add_driver)
     aviasales.choose_country_of_location()
     aviasales.add_coockie()
@@ -59,12 +59,32 @@ def test_choose_date(add_driver):
 @allure.title('Позитивный тест на выбор и отображение количества пассажиров')
 def test_choose_count_of_passenger(add_driver):
     aviasales = main_page_of_search_tickets(add_driver)
-    data = data_test()
     aviasales.choose_country_of_location()
     aviasales.add_coockie()
+    data = data_test()
     passengers = data.generate_passenger_count()
-    passengers_value = aviasales.choose_count_of_passenger(
+    aviasales.choose_count_of_passenger(
         passengers[0], passengers[1], passengers[2]
         )
+    passengers_value = aviasales.get_passengers_count_value()
     with allure.step('Проверка отображения выбранного количества пассажиров в поисковой строке'):
         assert passengers[3] in passengers_value
+
+
+@allure.id("Positive5")
+@allure.feature('Search')
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title('Позитивный тест на выбор и отображение класса билета')
+def test_choose_flight_class(add_driver):
+    aviasales = main_page_of_search_tickets(add_driver)
+    aviasales.choose_country_of_location()
+    aviasales.add_coockie()
+    data = data_test()
+    flight_class = data.First_class
+    aviasales.choose_class(flight_class)
+    class_value = aviasales.get_class_value()
+    with allure.step('Проверить, что выбранный класс ' + class_value + ' равен ' + flight_class):
+        assert class_value == flight_class
+
+
+    

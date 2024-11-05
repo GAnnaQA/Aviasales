@@ -9,10 +9,11 @@ import allure
 
 @allure.story('Поиск авиабилетов (UI)')
 class main_page_of_search_tickets:
-    @allure.step('')
+    @allure.step('Открыть главную страницу сайта Авиасейлс')
     def __init__(self, browser: WebDriver):
         self._driver = browser
         self._driver.get("https://www.aviasales.ru")
+
 
     @allure.step('Настрайка местоположения')
     def choose_country_of_location(self):
@@ -91,7 +92,6 @@ class main_page_of_search_tickets:
             By.CSS_SELECTOR, 'input[data-test-id="destination-input"]'
             )
         destination_input.clear()
-
 
 
     @allure.step('Выбор даты вылета')
@@ -199,8 +199,17 @@ class main_page_of_search_tickets:
             infants_value = self._driver.find_element(
                 By.XPATH, '//div[@data-test-id="number-of-infants"]//div[@data-test-id="passenger-number"]'
                 ).text
-        return button.find_element(By.CSS_SELECTOR, 'div[data-test-id="passenger-numbers"]').text
-
+        button.click()
+    
+    @allure.step('Получение значения количества пассажиров, отображаемого в поисковой строке')
+    def get_passengers_count_value(self):
+        button = self._driver.find_element(
+            By.CSS_SELECTOR, 'button[data-test-id="passengers-field"]'
+            )
+        return button.find_element(
+            By.CSS_SELECTOR, 'div[data-test-id="passenger-numbers"]'
+            ).text
+        
 
     @allure.step('Выбор страны в разделе "Популярные направления"')
     def choose_popular_destination(self, index: int)-> str:
@@ -241,3 +250,20 @@ class main_page_of_search_tickets:
         except TimeoutException:
             print("Время ожидания истекло: элемент не найден.")
             return "Элемент не найден"
+
+
+    @allure.step('Установка класса билета')
+    def choose_class(self, Class):
+        button = self._driver.find_element(
+            By.CSS_SELECTOR, 'button[data-test-id="passengers-field"]'
+            )
+        button.click()
+        radiobutton = self._driver.find_element(
+            By.XPATH, f'//label[@data-test-id="radio-button" and .//span[text()="{Class}"]]'
+            )
+        radiobutton.click()
+        button.click()
+
+    @allure.step('Получение значения класса, отображаемого в поисковой строке')
+    def get_class_value(self):
+        return self._driver.find_element(By.CSS_SELECTOR, 'div[data-test-id="trip-class"]').text
