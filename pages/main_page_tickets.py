@@ -6,11 +6,15 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import Select
 import allure
 
+
+@allure.story('Поиск авиабилетов (UI)')
 class main_page_of_search_tickets:
+    @allure.step('')
     def __init__(self, browser: WebDriver):
         self._driver = browser
         self._driver.get("https://www.aviasales.ru")
 
+    @allure.step('Настрайка местоположения')
     def choose_country_of_location(self):
         try:
             WebDriverWait(self._driver, 10).until(EC.visibility_of_element_located((
@@ -25,6 +29,7 @@ class main_page_of_search_tickets:
             print("Элемент не найден, продолжаем выполнение теста.")
 
 
+    @allure.step('Установка cookies_policy')
     def add_coockie(self):
         policy = {
             'name': 'cookies_policy',
@@ -34,12 +39,62 @@ class main_page_of_search_tickets:
         self._driver.refresh()
 
 
-    # def enter_place_of_departure:
+    @allure.step('Ввести значение в поле ввода "From"')
+    def enter_place_of_departure(self, DeparturePlace: str):
+        departure_input = self._driver.find_element(
+            By.CSS_SELECTOR, 'input[data-test-id="origin-input"]'
+            )
+        departure_input.send_keys(DeparturePlace)
+        dropdown = self._driver.find_element(By.CSS_SELECTOR, 'div[data-test-id="dropdown"]')
+        city = dropdown.find_element(By.CSS_SELECTOR, ":first-child")
+        city.click()
+        
+
+    @allure.step('Получить значение поля ввода "From"')
+    def get_departure_place_value(self)-> str:
+        departure_input = self._driver.find_element(
+            By.CSS_SELECTOR, 'input[data-test-id="origin-input"]'
+            )
+        return departure_input.get_attribute('value')
+    
+
+    @allure.step('Очистить поле ввода "From"')
+    def clear_departure_place_input(self):
+        departure_input = self._driver.find_element(
+            By.CSS_SELECTOR, 'input[data-test-id="origin-input"]'
+            )
+        departure_input.clear()
 
 
-    # def enter_place_of_destination(self, DestinationPlace: str):
+    @allure.step('Ввести значение в поле ввода "To"')
+    def enter_place_of_destination(self, DestinationPlace: str):
+        destination_input = self._driver.find_element(
+            By.CSS_SELECTOR, 'input[data-test-id="destination-input"]'
+            )
+        destination_input.send_keys(DestinationPlace)
+        dropdown = self._driver.find_element(By.CSS_SELECTOR, 'div[data-test-id="dropdown"]')
+        city = dropdown.find_element(By.CSS_SELECTOR, ":first-child")
+        city.click()
+        
+
+    @allure.step('Получить значение поля ввода "To"')
+    def get_destination_value(self)-> str:
+        destination_input = self._driver.find_element(
+            By.CSS_SELECTOR, 'input[data-test-id="destination-input"]'
+            )
+        return destination_input.get_attribute('value')
+    
+
+    @allure.step('Очистить поле ввода "To"')
+    def clear_destination_input(self):
+        destination_input = self._driver.find_element(
+            By.CSS_SELECTOR, 'input[data-test-id="destination-input"]'
+            )
+        destination_input.clear()
 
 
+
+    @allure.step('Выбор даты вылета')
     def choose_date_of_departure(self, Month: str, Day: str):
         self._driver.find_element(
                     By.CSS_SELECTOR, 'button[data-test-id="start-date-field"]'
@@ -52,6 +107,7 @@ class main_page_of_search_tickets:
         self._driver.find_element(By.XPATH, f"//div[text()='{Day}']").click()
 
 
+    @allure.step('Получения значения, отображаемого в поле "Departure"')
     def get_departure_date_value(self)-> str:
         button = self._driver.find_element(
             By.CSS_SELECTOR,'button[data-test-id="start-date-field"]'
@@ -65,6 +121,7 @@ class main_page_of_search_tickets:
         return departure_date_value
     
 
+    @allure.step('Получения значения, отображаемого в поле "Return"')
     def get_return_date_value(self)-> str:
         button = self._driver.find_element(
             By.CSS_SELECTOR,'button[data-test-id="end-date-field"]'
@@ -78,6 +135,7 @@ class main_page_of_search_tickets:
         return return_date_value
 
 
+    @allure.step('Нажатие на кнопку "I don`t need a return ticket"')
     def choose_one_way_tickets(self)-> None|str:
         try:
             dont_need_return_ticket_button = WebDriverWait(self._driver, 10).until(
@@ -90,6 +148,7 @@ class main_page_of_search_tickets:
             return "Кнопка не отображается на странице"
 
 
+    @allure.step('Установка количества пассажиров')
     def choose_count_of_passenger(self, Adults: str, Children: str, Infants: str):
         button = self._driver.find_element(
             By.CSS_SELECTOR, 'button[data-test-id="passengers-field"]'
@@ -143,6 +202,7 @@ class main_page_of_search_tickets:
         return button.find_element(By.CSS_SELECTOR, 'div[data-test-id="passenger-numbers"]').text
 
 
+    @allure.step('Выбор страны в разделе "Популярные направления"')
     def choose_popular_destination(self, index: int)-> str:
         if not (1 <= index <= 4):
             raise ValueError("Индекс должен быть от 1 до 4")
@@ -168,6 +228,7 @@ class main_page_of_search_tickets:
         return title_value
     
 
+    @allure.step('Получения значения, отображаемого в поле "To"')
     def get_destination_value(self)-> str:
         try:
             input_element = WebDriverWait(self._driver, 10).until(
