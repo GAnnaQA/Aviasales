@@ -10,15 +10,22 @@ class data_test:
     First_class = "First"
     with allure.step('Генерция номера популярного направления для выбора'):
         direction_number = random.randint(1, 4)
-    with allure.step('Случайный выбор дня'):
-        serch_day = random.randint(1, 28)
     
-    @allure.step('Случайный выбор месяца')
-    def choose_month(self)-> str:
-        months = ['January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December']
-        serch_month = random.choice(months)
-        return serch_month
+    @allure.step('Генерация даты')
+    def get_random_date(self) -> str:
+        current_date = datetime.now()
+        random_days = random.randint(0, 330)
+        random_date = current_date + timedelta(days=random_days)
+        formatted_date = random_date.strftime("%d.%m.%Y")
+        return formatted_date
+
+    @allure.step('Генерация даты обратного билета')
+    def get_return_date(self, startDate: str, daysCount: int) -> str:
+        date_object = datetime.strptime(startDate, "%d.%m.%Y")
+        return_date = date_object + timedelta(days=daysCount)
+        formatted_date = return_date.strftime("%d.%m.%Y")
+        return formatted_date
+
     
     @allure.step('Генерация количества пассажиров')
     def generate_passenger_count(self)-> list[str]:

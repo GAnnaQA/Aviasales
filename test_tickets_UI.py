@@ -39,16 +39,16 @@ def test_choose_popular_destination(add_driver):
 @allure.title('Позитивный тест на ввод и отображение валидной даты отправления')
 def test_choose_date(add_driver):
     aviasales = main_page_of_search_tickets(add_driver)
-    data = data_test()
-    day = data.serch_day
     aviasales.choose_country_of_location()
     aviasales.add_coockie()
-    aviasales.choose_date_of_departure(data.choose_month(), day)
+    data = data_test()
+    startDate = data.get_random_date()
+    entered_date = aviasales.enter_date_of_departure(startDate)
     aviasales.choose_one_way_tickets()
     departure_date_value = aviasales.get_departure_date_value()
     return_date_value = aviasales.get_return_date_value()
     with allure.step('Проверка отображения выбранного дня вылета в поле ввода "Departure"'):
-        assert str(day) in departure_date_value
+        assert entered_date in departure_date_value
     with allure.step('Проверка незаполненности поля ввода "Return"'):
         assert return_date_value == 'Return'
 
@@ -87,4 +87,17 @@ def test_choose_flight_class(add_driver):
         assert class_value == flight_class
 
 
-    
+@allure.id("Positive6")
+@allure.feature('Search')
+@allure.severity(allure.severity_level.CRITICAL)
+@allure.title('Позитивный тест на выбор и отображение даты обратного билета')
+def test_enter_date(add_driver):
+    aviasales = main_page_of_search_tickets(add_driver)
+    aviasales.choose_country_of_location()
+    aviasales.add_coockie()
+    data = data_test()
+    ReturnDate = data.get_random_date()
+    entered_return_date = aviasales.enter_date_of_return(ReturnDate)
+    return_date_value = aviasales.get_return_date_value()
+    with allure.step('Проверка отображения выбранного дня обратного билета в поле ввода "Return"'):
+        assert entered_return_date in return_date_value
