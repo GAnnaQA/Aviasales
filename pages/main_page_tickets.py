@@ -94,17 +94,28 @@ class main_page_of_search_tickets:
         destination_input.clear()
 
 
-    @allure.step('Выбор даты вылета')
-    def choose_date_of_departure(self, Month: str, Day: str):
+    @allure.step('Ввод даты вылета в поле "Departure"')
+    def enter_date_of_departure(self, StartDate: str)-> str:
         self._driver.find_element(
                     By.CSS_SELECTOR, 'button[data-test-id="start-date-field"]'
                     ).click()
-        month_selector = self._driver.find_element(
-            By.CSS_SELECTOR, 'select[data-test-id="select-month"]'
-            )
-        select = Select(month_selector)
-        select.select_by_visible_text(Month)
-        self._driver.find_element(By.XPATH, f"//div[text()='{Day}']").click()
+        while True:
+            try:
+                serch_date = self._driver.find_element(
+                    By.CSS_SELECTOR, f'div[data-test-id="date-{StartDate}"]'
+                    )
+                serch_date.click()
+                break
+            except NoSuchElementException:
+                buttons = self._driver.find_elements(
+                    By.CSS_SELECTOR, 'button[data-test-id="button"]'
+                    )
+                if len(buttons) > 1:
+                    buttons[1].click()
+                else:
+                    print("Кнопка с индексом 1 не найдена.")
+                    break
+        return serch_date.text
 
 
     @allure.step('Получения значения, отображаемого в поле "Departure"')
@@ -120,6 +131,30 @@ class main_page_of_search_tickets:
             ).text
         return departure_date_value
     
+
+    @allure.step('Ввод даты обратного билета в поле "Return"')
+    def enter_date_of_return(self, ReturnDate: str)-> str:
+        self._driver.find_element(
+            By.CSS_SELECTOR,'button[data-test-id="end-date-field"]'
+            ).click()
+        while True:
+            try:
+                serch_date = self._driver.find_element(
+                    By.CSS_SELECTOR, f'div[data-test-id="date-{ReturnDate}"]'
+                    )
+                serch_date.click()
+                break
+            except NoSuchElementException:
+                buttons = self._driver.find_elements(
+                    By.CSS_SELECTOR, 'button[data-test-id="button"]'
+                    )
+                if len(buttons) > 1:
+                    buttons[1].click()
+                else:
+                    print("Кнопка с индексом 1 не найдена.")
+                    break
+        return serch_date.text if 'serch_date' in locals() else "Элемент не найден."
+        
 
     @allure.step('Получения значения, отображаемого в поле "Return"')
     def get_return_date_value(self)-> str:
