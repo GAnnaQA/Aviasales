@@ -12,7 +12,7 @@ class main_page_of_search_tickets:
     @allure.step('Открыть главную страницу сайта Авиасейлс')
     def __init__(self, browser: WebDriver):
         self._driver = browser
-        self._driver.get("https://www.aviasales.ru")
+        self._driver.get("https://www.aviasales.com")
 
 
     @allure.step('Настрайка местоположения')
@@ -301,4 +301,23 @@ class main_page_of_search_tickets:
 
     @allure.step('Получение значения класса, отображаемого в поисковой строке')
     def get_class_value(self):
-        return self._driver.find_element(By.CSS_SELECTOR, 'div[data-test-id="trip-class"]').text
+        return self._driver.find_element(
+            By.CSS_SELECTOR, 'div[data-test-id="trip-class"]'
+            ).text
+    
+
+    def click_search_button(self):
+        self._driver.find_element(
+            By.CSS_SELECTOR, 'button[data-test-id="form-submit"]'
+            ).click()
+
+
+    def get_data_about_found_tickets(self, numder_of_ticket: int):
+        found_tickets = self._driver.find_elements(
+            By.CSS_SELECTOR, 'div.s__K_z9WFumQO2KSxooJM0c.s__W9yDNL_eJ6KrZBxYoreS'
+            )
+        one_found_ticket = found_tickets[numder_of_ticket]
+        depurture_place = one_found_ticket.find_element(
+            By.CSS_SELECTOR, 'span'
+            ).text
+        return depurture_place
