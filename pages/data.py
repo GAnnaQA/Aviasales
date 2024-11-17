@@ -10,6 +10,8 @@ class data_test:
     First_class = "First"
     with allure.step('Генерция номера популярного направления для выбора'):
         direction_number = random.randint(1, 4)
+    with allure.step('Генерция номера найденного билета'):
+        ticket_number = random.randint(0, 9)
     
     @allure.step('Генерация даты')
     def get_random_date(self) -> str:

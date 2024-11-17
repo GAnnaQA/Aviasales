@@ -1,21 +1,6 @@
 from pages.main_page_tickets import main_page_of_search_tickets
 from pages.data import data_test
-from time import sleep
 import allure
-
-@allure.id("Positive4")
-@allure.feature('Search')
-@allure.severity(allure.severity_level.CRITICAL)
-@allure.title('Позитивный тест на поиск авиабилетов в одну сторону')
-def test_one_way_flight_search(add_driver):
-    aviasales = main_page_of_search_tickets(add_driver)
-    aviasales.choose_country_of_location()
-    aviasales.add_coockie()
-    aviasales.enter_place_of_destination('Mosc')
-    destination_place = aviasales.get_destination_value()
-    aviasales.clear_departure_place_input()
-    aviasales.enter_place_of_departure('New')
-    departure_place = aviasales.get_departure_place_value()
 
 
 @allure.id("Positive1")
@@ -37,7 +22,7 @@ def test_choose_popular_destination(add_driver):
 @allure.feature('Search')
 @allure.severity(allure.severity_level.CRITICAL)
 @allure.title('Позитивный тест на ввод и отображение валидной даты отправления')
-def test_choose_date(add_driver):
+def test_choose_departure_date(add_driver):
     aviasales = main_page_of_search_tickets(add_driver)
     aviasales.choose_country_of_location()
     aviasales.add_coockie()
@@ -91,7 +76,7 @@ def test_choose_flight_class(add_driver):
 @allure.feature('Search')
 @allure.severity(allure.severity_level.CRITICAL)
 @allure.title('Позитивный тест на выбор и отображение даты обратного билета')
-def test_enter_date(add_driver):
+def test_enter_return_date(add_driver):
     aviasales = main_page_of_search_tickets(add_driver)
     aviasales.choose_country_of_location()
     aviasales.add_coockie()
